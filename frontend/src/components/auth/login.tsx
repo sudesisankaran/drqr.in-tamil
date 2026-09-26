@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Mail, Lock, LogIn } from "lucide-react";
-import AuthWrapper, { PageFooter, PageHeader } from "./AuthWrapper";
+import AuthWrapper, { PageFooter } from "./AuthWrapper";
 import InputField from "../common/InputField";
 import Button from "../common/Button";
 import _env from "../../utils/_env";
@@ -80,8 +80,10 @@ const Login = () => {
                 email: userData.email,
                 role: userData.role,
                 profile_image: userData.profile_image,
-                patientId: userData.patient_id
-            };
+                patientId: userData.patient_id,
+                password: "managed_by_supabase_auth",
+                notifications: false
+            } as any;
 
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("user", JSON.stringify(userContextObj));

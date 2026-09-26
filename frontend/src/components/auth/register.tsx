@@ -149,8 +149,10 @@ const Register = () => {
                 email: userData.email,
                 role: userData.role,
                 profile_image: userData.profile_image,
-                patientId: userData.patient_id
-            };
+                patientId: userData.patient_id,
+                password: "managed_by_supabase_auth",
+                notifications: false
+            } as any;
 
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("user", JSON.stringify(userContextObj));
