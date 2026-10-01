@@ -28,8 +28,8 @@ app.use("/api/treatments", treatmentRoutes);
 app.use("/api/records", recordRoutes);
 app.use("/api/health", healthRoutes);
 
-// JSON 404 handler for missing API routes
-app.use("/api/*", (req, res) => {
+// JSON 404 handler for missing routes
+app.use((req, res) => {
   res.status(404).json({ message: "Not Implemented Yet" });
 });
 

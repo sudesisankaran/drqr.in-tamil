@@ -27,6 +27,7 @@ export const protect = async (req: any, res: Response, next: NextFunction) => {
       .single();
 
     if (userError || !userData) {
+      console.error("DEBUG: userError =", userError, "userData =", userData);
       return res.status(401).json({ message: "User profile not found" });
     }
 
