@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import supabase from "../config/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 export const protect = async (req: any, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -15,7 +16,11 @@ export const protect = async (req: any, res: Response, next: NextFunction) => {
       return res.status(401).json({ message: "Invalid token" });
     }
 
-    const { data: userData, error: userError } = await supabase
+    const authSupabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!, {
+      global: { headers: { Authorization: `Bearer ${token}` } }
+    });
+
+    const { data: userData, error: userError } = await authSupabase
       .from("users")
       .select("*")
       .eq("id", authData.user.id)
@@ -46,7 +51,10 @@ export const optionalProtect = async (
   try {
     const { data: authData } = await supabase.auth.getUser(token);
     if (authData?.user) {
-      const { data: userData } = await supabase
+      const authSupabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!, {
+        global: { headers: { Authorization: `Bearer ${token}` } }
+      });
+      const { data: userData } = await authSupabase
         .from("users")
         .select("*")
         .eq("id", authData.user.id)

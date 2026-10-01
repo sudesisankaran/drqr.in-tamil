@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import supabase from "./config/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 let io: Server | null = null;
 const userSockets = new Map<string, Set<string>>();
@@ -37,7 +38,11 @@ export const initSocket = (httpServer: any) => {
       const { data: authData, error } = await supabase.auth.getUser(token);
       if (error || !authData.user) throw new Error("Unauthorized");
       
-      const { data: userData } = await supabase
+      const authSupabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!, {
+        global: { headers: { Authorization: `Bearer ${token}` } }
+      });
+      
+      const { data: userData } = await authSupabase
         .from("users")
         .select("*")
         .eq("id", authData.user.id)
